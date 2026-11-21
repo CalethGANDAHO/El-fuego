@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getAllReservations, cancelReservation } from '../../lib/reservationService';
+import { getAllReservations } from '../../lib/reservationService';
 import { exportReservationsToExcel } from '../../lib/exportExcel';
-import { Download, RefreshCw, MessageSquare } from 'lucide-react';
+import { Download, RefreshCw } from 'lucide-react';
 import { formatDateFr } from '../../lib/utils';
-import { zones } from '../../data/zonesData';
 
 export default function AdminDashboardView() {
   const [reservations, setReservations] = useState([]);
@@ -30,7 +29,7 @@ export default function AdminDashboardView() {
   return (
     <div className="space-y-6">
       {/* Statistiques Rapides */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         <div className="rounded-2xl border border-border bg-card p-4">
           <span className="text-xs text-muted-foreground block">Total Réservations</span>
           <strong className="text-2xl font-serif text-white">{reservations.length}</strong>
@@ -40,15 +39,9 @@ export default function AdminDashboardView() {
           <strong className="text-2xl font-serif text-primary">{totalGuests}</strong>
         </div>
         <div className="rounded-2xl border border-border bg-card p-4">
-          <span className="text-xs text-muted-foreground block">Terrasse</span>
-          <strong className="text-2xl font-serif text-gold">
-            {reservations.filter(r => r.zone_id === 'terrasse').length}
-          </strong>
-        </div>
-        <div className="rounded-2xl border border-border bg-card p-4">
-          <span className="text-xs text-muted-foreground block">Salle Intérieure</span>
-          <strong className="text-2xl font-serif text-exotik">
-            {reservations.filter(r => r.zone_id === 'salle').length}
+          <span className="text-xs text-muted-foreground block">Confirmées</span>
+          <strong className="text-2xl font-serif text-emerald-400">
+            {reservations.filter(r => r.statut !== 'ANNULE').length}
           </strong>
         </div>
       </div>
@@ -81,7 +74,7 @@ export default function AdminDashboardView() {
               <th className="p-3">Date</th>
               <th className="p-3">Heure</th>
               <th className="p-3">Couverts</th>
-              <th className="p-3">Zone</th>
+              <th className="p-3">Occasion</th>
               <th className="p-3">Statut</th>
             </tr>
           </thead>
@@ -101,7 +94,7 @@ export default function AdminDashboardView() {
                   <td className="p-3">{r.date}</td>
                   <td className="p-3 font-bold">{r.heure}</td>
                   <td className="p-3">{r.personnes} pers.</td>
-                  <td className="p-3">{r.zone_id}</td>
+                  <td className="p-3">{r.occasion || 'Standard'}</td>
                   <td className="p-3">
                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
                       r.statut === 'ANNULE' ? 'bg-red-500/20 text-red-400' : 'bg-emerald-500/20 text-emerald-400'

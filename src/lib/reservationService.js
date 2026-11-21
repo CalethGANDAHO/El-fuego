@@ -1,12 +1,10 @@
 import { supabase, isSupabaseConfigured } from './supabase';
-import { zones } from '../data/zonesData';
 import { RESTAURANT_CONFIG } from '../data/restaurant.config';
 
 export const SLOTS = RESTAURANT_CONFIG.slots;
 export const OCCASIONS = RESTAURANT_CONFIG.occasions;
 
 const LOCAL_STORAGE_KEY = 'elfuego_reservations_data';
-const BLOCKED_DATES_KEY = 'elfuego_blocked_dates';
 
 function getLocalReservations() {
   try {
@@ -51,12 +49,15 @@ export function validateBeninPhone(phone) {
   } else if (normalized.startsWith('00229')) {
     normalized = normalized.substring(5);
   }
-  return { valid: true, formatted: `+229 ${normalized.substring(0, 2)} ${normalized.substring(2, 4)} ${normalized.substring(4, 6)} ${normalized.substring(6)}` };
+  return {
+    valid: true,
+    formatted: `+229 ${normalized.substring(0, 2)} ${normalized.substring(2, 4)} ${normalized.substring(4, 6)} ${normalized.substring(6)}`
+  };
 }
 
 export async function createReservation(bookingData) {
   if (bookingData.website_honeypot) {
-    throw new Error("Erreur de sécurité.");
+    throw new Error("Erreur de validation.");
   }
 
   const phoneValidation = validateBeninPhone(bookingData.telephone);
@@ -82,7 +83,7 @@ export async function createReservation(bookingData) {
         .single();
       if (!error && data) return data;
     } catch (e) {
-      console.warn("Supabase indisponible, bascule sur stockage local.");
+      console.warn("Supabase indisponible, sauvegarde locale.");
     }
   }
 
@@ -104,9 +105,7 @@ export async function getReservationByReference(reference) {
         .eq('reference', cleanRef)
         .single();
       if (!error && data) return data;
-    } catch (e) {
-      console.warn("Recherche locale suite à erreur Supabase");
-    }
+    } catch (e) {}
   }
 
   const list = getLocalReservations();
@@ -123,9 +122,7 @@ export async function cancelReservation(reference) {
         .from('reservations')
         .update({ statut: 'ANNULE' })
         .eq('reference', cleanRef);
-    } catch (e) {
-      console.warn(e);
-    }
+    } catch (e) {}
   }
 
   const list = getLocalReservations();
@@ -149,25 +146,23 @@ export async function getAllReservations() {
 
 export function generateWhatsAppConfirmationLink(reservation) {
   const phone = RESTAURANT_CONFIG.contact.whatsappNumber;
-  const zoneObj = zones.find(z => z.id === reservation.zone_id);
-  const zoneName = zoneObj ? zoneObj.name : reservation.zone_id;
 
-  const msg = `🔥 *EL FUEGO & EXOTI’K — CONFIRMATION DE TABLE*\n` +
+  const msg = `🔥 *EL FUEGO & EXOTI’K — DEMANDE DE RÉSERVATION*\n` +
     `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
     `📋 *RÉFÉRENCE :* \`${reservation.reference}\`\n` +
     `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
     `📅 *Date :* ${reservation.date}\n` +
-    `🕐 *Heure :* ${reservation.heure}\n` +
-    `👥 *Couverts :* ${reservation.personnes} personne(s)\n` +
-    `📍 *Zone :* ${zoneName}\n` +
+    `🕐 *Heure d'arrivée :* ${reservation.heure}\n` +
+    `👥 *Nombre de personnes :* ${reservation.personnes} couvert(s)\n` +
     `🎉 *Occasion :* ${reservation.occasion}\n\n` +
-    `👤 *Nom :* ${reservation.nom}\n` +
+    `👤 *Nom complet :* ${reservation.nom}\n` +
     `📞 *Téléphone :* ${reservation.telephone}\n` +
     (reservation.demandes_speciales ? `📝 *Précisions :* ${reservation.demandes_speciales}\n` : '') +
     `\n━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
     `⏰ *Table retenue 15 minutes.*\n` +
     `📍 Rue 1368, Akpakpa, carrefour Le Bélier, Cotonou\n` +
-    `━━━━━━━━━━━━━━━━━━━━━━━━━`;
+    `━━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+    `Merci de me confirmer la prise en compte de ma table !`;
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 }

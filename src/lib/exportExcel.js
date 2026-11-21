@@ -11,7 +11,6 @@ export function exportReservationsToExcel(reservations) {
     "Date": r.date,
     "Heure": r.heure,
     "Couverts": r.personnes,
-    "Zone": r.zone_id,
     "Occasion": r.occasion || "Standard",
     "Client": r.nom,
     "Téléphone": r.telephone,

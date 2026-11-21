@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { X, Search, AlertCircle, CheckCircle, Ban } from 'lucide-react';
 import { getReservationByReference, cancelReservation } from '../../lib/reservationService';
 import { formatDateFr } from '../../lib/utils';
-import { zones } from '../../data/zonesData';
 
 export default function ManageReservationModal({ isOpen, onClose }) {
   const [refInput, setRefInput] = useState('');

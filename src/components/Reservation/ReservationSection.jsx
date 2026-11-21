@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Step1DateTime from './Step1DateTime';
-import Step2ZoneOccasion from './Step2ZoneOccasion';
-import Step3ContactConfirm from './Step3ContactConfirm';
+import Step2ContactConfirm from './Step2ContactConfirm';
 import ReservationSuccessModal from './ReservationSuccessModal';
 import DigitalPassModal from './DigitalPassModal';
 import ManageReservationModal from './ManageReservationModal';
-import { createReservation, generateWhatsAppFallbackLink } from '../../lib/reservationService';
-import { MessageCircle, Search } from 'lucide-react';
+import { createReservation, generateWhatsAppConfirmationLink, generateWhatsAppFallbackLink } from '../../lib/reservationService';
+import { Search } from 'lucide-react';
 
 export default function ReservationSection({ preselectedDish }) {
   const [step, setStep] = useState(0);
@@ -21,7 +20,6 @@ export default function ReservationSection({ preselectedDish }) {
     date: todayStr,
     heure: '20:30',
     personnes: 2,
-    zone_id: 'terrasse',
     occasion: 'Dîner standard / Entre amis',
     demandes_speciales: preselectedDish ? `Précommande : ${preselectedDish.name}` : '',
     nom: '',
@@ -40,11 +38,16 @@ export default function ReservationSection({ preselectedDish }) {
     try {
       const res = await createReservation(booking);
       setConfirmedReservation(res);
+
+      // REDIRECTION IMMÉDIATE VERS WHATSAPP !
+      const whatsappUrl = generateWhatsAppConfirmationLink(res);
+      window.open(whatsappUrl, '_blank');
+
+      // Réinitialisation du formulaire
       setBooking({
         date: todayStr,
         heure: '20:30',
         personnes: 2,
-        zone_id: 'terrasse',
         occasion: 'Dîner standard / Entre amis',
         demandes_speciales: '',
         nom: '',
@@ -54,7 +57,7 @@ export default function ReservationSection({ preselectedDish }) {
       });
       setStep(0);
     } catch (err) {
-      setError(err.message || "Une erreur est survenue.");
+      setError(err.message || "Une erreur est survenue lors de la réservation.");
     } finally {
       setSubmitting(false);
     }
@@ -63,18 +66,17 @@ export default function ReservationSection({ preselectedDish }) {
   const whatsappFallbackUrl = generateWhatsAppFallbackLink();
 
   return (
-    <section id="reserve" className="relative mx-auto max-w-6xl px-5 py-24 sm:px-8">
+    <section id="reserve" className="relative mx-auto max-w-5xl px-5 py-24 sm:px-8">
       <div className="glass overflow-hidden rounded-[2.5rem] p-6 sm:p-12 border border-primary/20 bg-background/90 shadow-2xl">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-border">
           <div>
             <span className="text-xs font-bold tracking-widest text-primary uppercase flex items-center gap-2">
-              <span className="size-2 rounded-full bg-emerald-400" /> Système de Réservation Haut de Gamme
+              <span className="size-2 rounded-full bg-emerald-400" /> Système de Réservation Simplifié & WhatsApp
             </span>
             <h2 className="mt-2 text-2xl sm:text-4xl font-serif font-extrabold text-white">
-              {step === 0 && "1. Date, Couverts & Créneau"}
-              {step === 1 && "2. Espace Préféré & Occasion"}
-              {step === 2 && "3. Coordonnées & Validation"}
+              {step === 0 && "1. Date, Couverts & Heure"}
+              {step === 1 && "2. Vos Coordonnées & Envoi WhatsApp"}
             </h2>
           </div>
 
@@ -99,20 +101,11 @@ export default function ReservationSection({ preselectedDish }) {
         )}
 
         {step === 1 && (
-          <Step2ZoneOccasion
-            booking={booking}
-            updateField={updateField}
-            onNext={() => setStep(2)}
-            onPrev={() => setStep(0)}
-          />
-        )}
-
-        {step === 2 && (
-          <Step3ContactConfirm
+          <Step2ContactConfirm
             booking={booking}
             updateField={updateField}
             onSubmit={handleFinalSubmit}
-            onPrev={() => setStep(1)}
+            onPrev={() => setStep(0)}
             submitting={submitting}
             error={error}
           />
@@ -120,9 +113,9 @@ export default function ReservationSection({ preselectedDish }) {
 
         {/* Fallback WhatsApp */}
         <div className="mt-8 pt-6 border-t border-border/50 text-center text-xs text-muted-foreground">
-          <span>Besoin d'aide immédiate ? </span>
+          <span>Vous préférez réserver directement par message ? </span>
           <a href={whatsappFallbackUrl} target="_blank" rel="noopener noreferrer" className="text-primary font-bold hover:underline">
-            Réserver directement sur WhatsApp &rarr;
+            Écrire à El Fuego sur WhatsApp &rarr;
           </a>
         </div>
       </div>
