@@ -20,7 +20,7 @@
   --fuego: #e8480c;
   --exotik: #2b873a;
   --gold: #f59e0b;
-  --glass: rgba(28, 19, 13, 0.75);
+  --glass: rgba(28, 19, 13, 0.78);
   --glass-border: rgba(232, 72, 12, 0.22);
   --shadow-soft: 0 20px 50px -20px rgba(0, 0, 0, 0.8);
   --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
@@ -33,23 +33,76 @@ body {
   overflow-x: hidden;
 }
 
+/* Glassmorphism 3D */
 .glass {
   background: var(--glass);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
   border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.lift {
-  transition: transform 0.35s var(--ease-lux), box-shadow 0.35s var(--ease-lux), border-color 0.35s var(--ease-lux);
-}
-.lift:hover {
-  border-color: var(--fuego);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(232, 72, 12, 0.25);
+/* 3D Depth Utilities */
+.preserve-3d {
+  transform-style: preserve-3d;
 }
 
+.translate-z-10 {
+  transform: translateZ(10px);
+}
+
+.translate-z-20 {
+  transform: translateZ(20px);
+}
+
+.translate-z-30 {
+  transform: translateZ(30px);
+}
+
+/* Animation de particules étincelles fluides (60 FPS sur GPU) */
+@keyframes floatEmber {
+  0% {
+    transform: translate3d(0, 100vh, 0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(var(--ember-drift, 40px), -10vh, 0) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.ember-particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, #ff7b2b 0%, #e8480c 60%, transparent 100%);
+  filter: drop-shadow(0 0 6px rgba(232, 72, 12, 0.8));
+  animation: floatEmber var(--ember-duration, 8s) ease-in infinite;
+  animation-delay: var(--ember-delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Flottement 3D subtil */
+@keyframes floatSubtle3D {
+  0%, 100% {
+    transform: perspective(600px) translate3d(0, 0, 0) rotateX(0deg);
+  }
+  50% {
+    transform: perspective(600px) translate3d(0, -6px, 12px) rotateX(1.5deg);
+  }
+}
+
+.animate-float-3d {
+  animation: floatSubtle3D 5s ease-in-out infinite;
+}
+
+/* Masquage de la scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
