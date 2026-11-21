@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { VibeProvider } from './context/VibeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TwoBrands from './components/TwoBrands';
@@ -27,55 +28,57 @@ export default function App() {
   };
 
   return (
-    <VibeProvider>
-      <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
-        {/* Navigation */}
-        <Navbar onOpenAdmin={() => setIsAdminOpen(true)} />
+    <LanguageProvider>
+      <VibeProvider>
+        <div className="min-h-screen overflow-x-hidden bg-background text-foreground transition-colors duration-400">
+          {/* Navigation avec Mode Jour/Nuit & Multilingue (FR, EN, YO) */}
+          <Navbar onOpenAdmin={() => setIsAdminOpen(true)} />
 
-        <main>
-          {/* 1. Hero plein écran avec photo nette */}
-          <Hero />
+          <main>
+            {/* 1. Hero plein écran avec photo 3D vivante */}
+            <Hero />
 
-          {/* 2. Présentation des 2 enseignes (El Fuego & Exoti'K) */}
-          <TwoBrands />
+            {/* 2. Présentation des 2 enseignes (El Fuego & Exoti'K) */}
+            <TwoBrands />
 
-          {/* 3. Menu avec filtres et modale d'ingrédients */}
-          <Menu onSelectDishForReservation={handleSelectDishForReservation} />
+            {/* 3. Menu avec cartes 3D interactives */}
+            <Menu onSelectDishForReservation={handleSelectDishForReservation} />
 
-          {/* 4. Bon de commande en direct WhatsApp */}
-          <OrderSection />
+            {/* 4. Bon de commande en direct WhatsApp */}
+            <OrderSection />
 
-          {/* 5. Module de réservation 3 étapes avec Pass VIP QR Code */}
-          <ReservationSection preselectedDish={preselectedDish} />
+            {/* 5. Module de réservation simplifié avec redirection WhatsApp */}
+            <ReservationSection preselectedDish={preselectedDish} />
 
-          {/* 6. Vidéos en direct des cuisines */}
-          <VideosSection />
+            {/* 6. Vidéos en direct des cuisines */}
+            <VideosSection />
 
-          {/* 7. Galerie photos de l'ambiance */}
-          <AtmosphereGallery />
+            {/* 7. Galerie photos de l'ambiance avec 3D Tilt */}
+            <AtmosphereGallery />
 
-          {/* 8. Avis vérifiés Google Maps */}
-          <ReviewsSection />
+            {/* 8. Avis vérifiés Google Maps */}
+            <ReviewsSection />
 
-          {/* 9. Atouts & Caractéristiques */}
-          <Features />
+            {/* 9. Atouts & Caractéristiques */}
+            <Features />
 
-          {/* 10. Horaires & Carte interactive Google Maps */}
-          <LocationAccess />
-        </main>
+            {/* 10. Horaires & Carte interactive Google Maps */}
+            <LocationAccess />
+          </main>
 
-        {/* Pied de page */}
-        <Footer />
+          {/* Pied de page */}
+          <Footer />
 
-        {/* Barre fixe mobile */}
-        <MobileBottomNav />
+          {/* Barre fixe mobile ergonomique */}
+          <MobileBottomNav />
 
-        {/* Bouton WhatsApp flottant */}
-        <FloatingWhatsApp />
+          {/* Bouton WhatsApp flottant */}
+          <FloatingWhatsApp />
 
-        {/* Modale d'administration restaurateur */}
-        <AdminModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
-      </div>
-    </VibeProvider>
+          {/* Modale d'administration restaurateur protégée */}
+          <AdminModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
+        </div>
+      </VibeProvider>
+    </LanguageProvider>
   );
 }

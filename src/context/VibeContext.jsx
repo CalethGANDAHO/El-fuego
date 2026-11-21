@@ -1,11 +1,43 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const VibeContext = createContext();
+const VibeContext = createContext({
+  vibe: 'night',
+  setVibe: () => {},
+  toggleVibe: () => {},
+  isOpen: true,
+  statusText: ''
+});
 
 export function VibeProvider({ children }) {
-  // Calcul en direct de l'état d'ouverture (heure locale Cotonou UTC+1)
+  const [vibe, setVibe] = useState(() => {
+    try {
+      const saved = localStorage.getItem('fuego_vibe');
+      return saved ? saved : 'night';
+    } catch {
+      return 'night';
+    }
+  });
+
   const [isOpen, setIsOpen] = useState(true);
   const [statusText, setStatusText] = useState("Ouvert maintenant · jusqu'à minuit");
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (vibe === 'day') {
+      root.classList.add('day');
+      root.classList.remove('dark');
+    } else {
+      root.classList.remove('day');
+      root.classList.add('dark');
+    }
+    try {
+      localStorage.setItem('fuego_vibe', vibe);
+    } catch {}
+  }, [vibe]);
+
+  const toggleVibe = () => {
+    setVibe(prev => (prev === 'night' ? 'day' : 'night'));
+  };
 
   useEffect(() => {
     const updateStatus = () => {
@@ -32,7 +64,7 @@ export function VibeProvider({ children }) {
   }, []);
 
   return (
-    <VibeContext.Provider value={{ isOpen, statusText }}>
+    <VibeContext.Provider value={{ vibe, setVibe, toggleVibe, isOpen, statusText }}>
       {children}
     </VibeContext.Provider>
   );

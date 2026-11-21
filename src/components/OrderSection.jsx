@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingBag, Plus, Minus, Send, PhoneCall } from 'lucide-react';
 import { RESTAURANT_CONFIG } from '../data/restaurant.config';
+import { useLanguage } from '../context/LanguageContext';
 
 const ORDER_ITEMS = [
   { category: "Grillades", items: ["Poisson braisé", "Poisson & légumes sautés", "Demi-poulet rôti", "Ailes de poulet épicées"] },
@@ -17,6 +18,7 @@ export default function OrderSection() {
   const [telephone, setTelephone] = useState("");
   const [adresse, setAdresse] = useState("");
   const [notes, setNotes] = useState("");
+  const { t } = useLanguage();
 
   const updateQuantity = (item, delta) => {
     setQuantities(prev => {
@@ -58,18 +60,18 @@ export default function OrderSection() {
   return (
     <section id="commander" className="relative mx-auto max-w-7xl px-5 py-24 sm:px-8">
       <div className="text-center max-w-3xl mx-auto mb-14">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">Service Express</span>
-        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-white">Commandez en direct</h2>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">{t('orderEyebrow')}</span>
+        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-foreground">{t('orderTitle')}</h2>
         <p className="mt-3 text-muted-foreground text-base">
-          Composez votre sélection et transmettez instantanément votre bon de commande sur notre WhatsApp officiel.
+          {t('orderDesc')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Liste des Articles */}
         <div className="lg:col-span-7 glass rounded-3xl p-6 sm:p-8 border border-border">
-          <h3 className="font-serif text-xl font-bold text-white mb-6 flex items-center gap-2">
-            <ShoppingBag className="size-5 text-primary" /> Sélectionnez vos plats
+          <h3 className="font-serif text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <ShoppingBag className="size-5 text-primary" /> {t('orderSelectDishes')}
           </h3>
 
           <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 no-scrollbar">
@@ -79,12 +81,12 @@ export default function OrderSection() {
                 <div className="space-y-2">
                   {grp.items.map(item => (
                     <div key={item} className="flex items-center justify-between p-3 rounded-xl bg-background/50 border border-border/60">
-                      <span className="text-sm text-white font-medium">{item}</span>
+                      <span className="text-sm text-foreground font-medium">{item}</span>
                       <div className="flex items-center gap-3">
                         <button
                           type="button"
                           onClick={() => updateQuantity(item, -1)}
-                          className="size-7 rounded-full bg-secondary border border-border flex items-center justify-center text-white hover:border-primary"
+                          className="size-7 rounded-full bg-secondary border border-border flex items-center justify-center text-foreground hover:border-primary"
                         >
                           <Minus className="size-3.5" />
                         </button>
@@ -94,7 +96,7 @@ export default function OrderSection() {
                         <button
                           type="button"
                           onClick={() => updateQuantity(item, 1)}
-                          className="size-7 rounded-full bg-secondary border border-border flex items-center justify-center text-white hover:border-primary"
+                          className="size-7 rounded-full bg-secondary border border-border flex items-center justify-center text-foreground hover:border-primary"
                         >
                           <Plus className="size-3.5" />
                         </button>
@@ -110,26 +112,26 @@ export default function OrderSection() {
         {/* Formulaire Coordonnées */}
         <div className="lg:col-span-5 glass rounded-3xl p-6 sm:p-8 border border-border flex flex-col justify-between">
           <div>
-            <h3 className="font-serif text-xl font-bold text-white mb-6">Vos informations</h3>
+            <h3 className="font-serif text-xl font-bold text-foreground mb-6">{t('orderYourInfo')}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                  Mode de service
+                  {t('orderServiceMode')}
                 </label>
                 <select
                   value={mode}
                   onChange={e => setMode(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                 >
-                  <option value="Livraison">🛵 Livraison à domicile / bureau</option>
-                  <option value="À emporter">🛍️ À emporter (Takeaway)</option>
-                  <option value="Sur place">🍽️ Dégustation sur place</option>
+                  <option value="Livraison">{t('orderDelivery')}</option>
+                  <option value="À emporter">{t('orderTakeaway')}</option>
+                  <option value="Sur place">{t('orderDineIn')}</option>
                 </select>
               </div>
 
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                  Nom complet *
+                  {t('orderFullName')}
                 </label>
                 <input
                   type="text"
@@ -137,16 +139,16 @@ export default function OrderSection() {
                   placeholder="Ex : Boris KOUADIO"
                   value={nom}
                   onChange={e => setNom(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                 />
               </div>
 
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                  Numéro WhatsApp *
+                  {t('orderWhatsApp')}
                 </label>
                 <div className="flex gap-2">
-                  <span className="flex items-center rounded-xl border border-border bg-secondary px-3 text-sm font-bold text-white">
+                  <span className="flex items-center rounded-xl border border-border bg-secondary px-3 text-sm font-bold text-foreground">
                     +229
                   </span>
                   <input
@@ -155,7 +157,7 @@ export default function OrderSection() {
                     placeholder="Ex : 59 29 02 29"
                     value={telephone}
                     onChange={e => setTelephone(e.target.value)}
-                    className="flex-1 rounded-xl border border-border bg-background px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+                    className="flex-1 rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                   />
                 </div>
               </div>
@@ -163,28 +165,28 @@ export default function OrderSection() {
               {mode === "Livraison" && (
                 <div>
                   <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                    Adresse précise de livraison
+                    {t('orderAddress')}
                   </label>
                   <input
                     type="text"
                     placeholder="Quartier, point de repère..."
                     value={adresse}
                     onChange={e => setAdresse(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+                    className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                   />
                 </div>
               )}
 
               <div>
                 <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-1">
-                  Précisions cuisine (facultatif)
+                  {t('orderNotes')}
                 </label>
                 <input
                   type="text"
                   placeholder="Ex : Piment séparé, sans oignon..."
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-white focus:border-primary focus:outline-none"
+                  className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none"
                 />
               </div>
 
@@ -204,7 +206,7 @@ export default function OrderSection() {
                 type="submit"
                 className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-bold text-white shadow-xl shadow-primary/30 hover:bg-primary-hover transition-all"
               >
-                <Send className="size-4" /> Envoyer sur WhatsApp
+                <Send className="size-4" /> {t('orderSubmit')}
               </button>
             </form>
           </div>
@@ -212,9 +214,9 @@ export default function OrderSection() {
           <div className="mt-4 pt-4 border-t border-border text-center">
             <a
               href={`tel:${RESTAURANT_CONFIG.contact.phoneFormatted}`}
-              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-white"
+              className="inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground"
             >
-              <PhoneCall className="size-3.5 text-primary" /> Ou commander directement par appel
+              <PhoneCall className="size-3.5 text-primary" /> {t('orderCallAlt')}
             </a>
           </div>
         </div>

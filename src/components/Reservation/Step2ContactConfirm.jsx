@@ -1,8 +1,11 @@
 import React from 'react';
 import { formatDateFr } from '../../lib/utils';
 import { User, Phone, Mail, Send, Calendar, Clock, Users, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function Step2ContactConfirm({ booking, updateField, onSubmit, onPrev, submitting, error }) {
+  const { t } = useLanguage();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!booking.nom.trim()) {
@@ -32,35 +35,35 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
       {/* Récapitulatif Visuel clair */}
       <div className="rounded-3xl border border-border bg-card/60 p-6 sm:p-8">
         <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-          Récapitulatif de votre demande
+          {t('resRecapTitle')}
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
           <div className="flex items-start gap-2.5">
             <Calendar className="size-4 text-primary shrink-0 mt-0.5" />
             <div>
               <span className="text-xs text-muted-foreground block">Date</span>
-              <strong className="text-white">{formatDateFr(booking.date)}</strong>
+              <strong className="text-foreground">{formatDateFr(booking.date)}</strong>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
             <Clock className="size-4 text-primary shrink-0 mt-0.5" />
             <div>
               <span className="text-xs text-muted-foreground block">Heure</span>
-              <strong className="text-white">{booking.heure}</strong>
+              <strong className="text-foreground">{booking.heure}</strong>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
             <Users className="size-4 text-primary shrink-0 mt-0.5" />
             <div>
               <span className="text-xs text-muted-foreground block">Couverts</span>
-              <strong className="text-white">{booking.personnes} personne(s)</strong>
+              <strong className="text-foreground">{booking.personnes}</strong>
             </div>
           </div>
           <div className="flex items-start gap-2.5">
             <Sparkles className="size-4 text-gold shrink-0 mt-0.5" />
             <div>
               <span className="text-xs text-muted-foreground block">Occasion</span>
-              <strong className="text-white">{booking.occasion}</strong>
+              <strong className="text-foreground">{booking.occasion}</strong>
             </div>
           </div>
         </div>
@@ -70,7 +73,7 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-2">
-            <User className="size-4 text-primary" /> Nom complet de réservation *
+            <User className="size-4 text-primary" /> {t('orderFullName')}
           </label>
           <input
             type="text"
@@ -78,16 +81,16 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
             placeholder="Ex : Boris KOUADIO"
             value={booking.nom}
             onChange={e => updateField('nom', e.target.value)}
-            className="w-full rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-white focus:border-primary focus:outline-none"
+            className="w-full rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-foreground focus:border-primary focus:outline-none"
           />
         </div>
 
         <div>
           <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2 mb-2">
-            <Phone className="size-4 text-primary" /> Numéro WhatsApp / Téléphone *
+            <Phone className="size-4 text-primary" /> {t('orderWhatsApp')}
           </label>
           <div className="flex gap-2">
-            <span className="flex items-center rounded-2xl border border-border bg-secondary px-4 text-sm font-bold text-white">
+            <span className="flex items-center rounded-2xl border border-border bg-secondary px-4 text-sm font-bold text-foreground">
               +229
             </span>
             <input
@@ -96,7 +99,7 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
               placeholder="Ex : 01 59 29 02 29"
               value={booking.telephone}
               onChange={e => updateField('telephone', e.target.value)}
-              className="flex-1 rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-white focus:border-primary focus:outline-none"
+              className="flex-1 rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-foreground focus:border-primary focus:outline-none"
             />
           </div>
         </div>
@@ -110,7 +113,7 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
             placeholder="Pour recevoir un double de confirmation par e-mail"
             value={booking.email}
             onChange={e => updateField('email', e.target.value)}
-            className="w-full rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-white focus:border-primary focus:outline-none"
+            className="w-full rounded-2xl border border-border bg-card px-5 py-3.5 text-sm text-foreground focus:border-primary focus:outline-none"
           />
         </div>
       </div>
@@ -126,9 +129,9 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
           type="button"
           onClick={onPrev}
           disabled={submitting}
-          className="rounded-2xl border border-border px-6 py-4 font-semibold text-sm text-muted-foreground hover:text-white"
+          className="rounded-2xl border border-border px-6 py-4 font-semibold text-sm text-muted-foreground hover:text-foreground"
         >
-          &larr; Modifier la date
+          {t('resStep2Prev')}
         </button>
         <button
           type="submit"
@@ -136,7 +139,7 @@ export default function Step2ContactConfirm({ booking, updateField, onSubmit, on
           className="flex items-center gap-2.5 rounded-2xl bg-primary px-8 py-4 font-bold text-sm text-white shadow-xl shadow-primary/30 hover:bg-primary-hover transition-all disabled:opacity-50"
         >
           <Send className="size-4" />
-          <span>{submitting ? "Validation en cours..." : "Valider & Envoyer sur WhatsApp 🔥"}</span>
+          <span>{submitting ? t('resSubmitting') : t('resStep2Submit')}</span>
         </button>
       </div>
     </form>

@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { menuCategories, menuDishes } from '../data/menuData';
 import MenuModal from './MenuModal';
 import TiltCard from './common/TiltCard';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Menu({ onSelectDishForReservation }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedDish, setSelectedDish] = useState(null);
+  const { t } = useLanguage();
 
   const filtered = menuDishes.filter(
     dish => activeCategory === "all" || dish.category === activeCategory
@@ -14,10 +16,10 @@ export default function Menu({ onSelectDishForReservation }) {
   return (
     <section id="menu" className="relative mx-auto max-w-7xl px-5 py-24 sm:px-8">
       <div className="text-center max-w-3xl mx-auto mb-14">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">Nos Spécialités Culinaires</span>
-        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-white">Le Menu en images</h2>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">{t('menuEyebrow')}</span>
+        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-foreground">{t('menuTitle')}</h2>
         <p className="mt-3 text-muted-foreground text-base">
-          Découvrez une sélection de nos grillades croustillantes, créations fraîches et cocktails exotiques.
+          {t('menuDesc')}
         </p>
 
         {/* Catégories / Onglets */}
@@ -29,7 +31,7 @@ export default function Menu({ onSelectDishForReservation }) {
               className={`rounded-full px-5 py-2.5 text-xs sm:text-sm font-semibold transition-all duration-300 ${
                 activeCategory === cat.id
                   ? 'bg-primary text-white shadow-xl shadow-primary/40 scale-105'
-                  : 'bg-card text-muted-foreground border border-border hover:border-primary/50 hover:text-white hover:scale-105'
+                  : 'bg-card text-muted-foreground border border-border hover:border-primary/50 hover:text-foreground hover:scale-105'
               }`}
             >
               {cat.label}
@@ -64,7 +66,7 @@ export default function Menu({ onSelectDishForReservation }) {
               </div>
               <div className="p-5 flex-1 flex flex-col justify-between [transform-style:preserve-3d]">
                 <div>
-                  <h3 className="font-serif text-lg font-bold text-white group-hover:text-primary transition-colors [transform:translateZ(15px)]">
+                  <h3 className="font-serif text-lg font-bold text-foreground group-hover:text-primary transition-colors [transform:translateZ(15px)]">
                     {dish.name}
                   </h3>
                   <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2 [transform:translateZ(10px)]">
@@ -72,7 +74,7 @@ export default function Menu({ onSelectDishForReservation }) {
                   </p>
                 </div>
                 <div className="mt-4 pt-3 border-t border-border/60 flex items-center justify-between text-xs font-bold text-primary [transform:translateZ(15px)]">
-                  <span>Détails & réservation</span>
+                  <span>{t('menuDetailsBtn')}</span>
                   <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
                 </div>
               </div>

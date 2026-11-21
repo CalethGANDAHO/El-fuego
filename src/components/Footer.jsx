@@ -1,10 +1,13 @@
 import React from 'react';
 import { RESTAURANT_CONFIG } from '../data/restaurant.config';
 import InstagramIcon from './icons/InstagramIcon';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
-    <footer className="border-t border-border bg-black/60 py-12 text-center text-xs text-muted-foreground">
+    <footer className="border-t border-border bg-card/60 py-12 text-center text-xs text-muted-foreground transition-colors duration-300">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
         <div className="flex justify-center mb-6">
           <div className="bg-white rounded-2xl p-3 shadow-md max-w-[220px]">
@@ -12,7 +15,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="font-semibold text-white text-sm mb-2">
+        <p className="font-semibold text-foreground text-sm mb-2">
           {RESTAURANT_CONFIG.identity.name} — Cotonou, Bénin
         </p>
         <p className="mb-4">
@@ -24,14 +27,14 @@ export default function Footer() {
             href="https://instagram.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 rounded-full bg-secondary text-white hover:text-primary transition-colors"
+            className="p-2 rounded-full bg-secondary text-foreground hover:text-primary transition-colors"
           >
             <InstagramIcon className="size-4" />
           </a>
         </div>
 
-        <p className="text-[11px] text-muted-foreground/60">
-          &copy; {new Date().getFullYear()} El Fuego & Exoti’K. Tous droits réservés. Conçu avec amour à Cotonou.
+        <p className="text-[11px] text-muted-foreground/80">
+          &copy; {new Date().getFullYear()} El Fuego & Exoti’K. {t('footerRights')}
         </p>
       </div>
     </footer>

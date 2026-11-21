@@ -1,15 +1,18 @@
 import React from 'react';
 import { Flame, Sparkles } from 'lucide-react';
 import TiltCard from './common/TiltCard';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function TwoBrands() {
+  const { t } = useLanguage();
+
   return (
     <section className="relative mx-auto max-w-7xl px-5 py-24 sm:px-8">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <span className="text-xs font-bold uppercase tracking-widest text-primary">Deux enseignes, une seule adresse gourmande</span>
-        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-white">Une cuisine généreuse qui réunit tout le monde</h2>
+        <span className="text-xs font-bold uppercase tracking-widest text-primary">{t('twoBrandsEyebrow')}</span>
+        <h2 className="mt-2 font-serif text-3xl sm:text-5xl font-extrabold text-foreground">{t('twoBrandsTitle')}</h2>
         <p className="mt-4 text-muted-foreground text-base">
-          Venez partager un poisson braisé croustillant, une pizza cuite avec amour ou un burger gourmet, puis terminez avec une coupe de fruits sculptée ou un cocktail rafraîchissant.
+          {t('twoBrandsDesc')}
         </p>
       </div>
 
@@ -18,7 +21,7 @@ export default function TwoBrands() {
         <TiltCard maxTilt={8} className="glass rounded-[2rem] border border-primary/25 overflow-hidden">
           <div className="relative h-72 overflow-hidden [transform-style:preserve-3d]">
             <span className="absolute top-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-xs font-extrabold text-white shadow-xl [transform:translateZ(30px)]">
-              <Flame className="size-4 animate-bounce" /> Restaurant & Bar
+              <Flame className="size-4 animate-bounce" /> {t('fuegoBadge')}
             </span>
             <img 
               src="/images/sign_elfuego.jpg" 
@@ -27,12 +30,12 @@ export default function TwoBrands() {
             />
           </div>
           <div className="p-8 [transform-style:preserve-3d]">
-            <h3 className="font-serif text-3xl font-extrabold text-primary mb-3 [transform:translateZ(20px)]">El Fuego</h3>
+            <h3 className="font-serif text-3xl font-extrabold text-primary mb-3 [transform:translateZ(20px)]">{t('fuegoTitle')}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed [transform:translateZ(10px)]">
-              Grillades braisées, pizzas savoureuses, pâtes italiennes, burgers fondants, spécialités libanaises et africaines. Bar à cocktails tropicaux, bières fraîches et sélection de vins. Retransmission des grands matchs et karaoké.
+              {t('fuegoDesc')}
             </p>
             <div className="mt-6 pt-4 border-t border-border/60 flex items-center gap-2 text-xs font-bold text-primary [transform:translateZ(15px)]">
-              <span>🔥 Le temple des braises & de la convivialité à Cotonou</span>
+              <span>{t('fuegoFooter')}</span>
             </div>
           </div>
         </TiltCard>
@@ -41,7 +44,7 @@ export default function TwoBrands() {
         <TiltCard maxTilt={8} className="glass rounded-[2rem] border border-exotik/30 overflow-hidden">
           <div className="relative h-72 overflow-hidden [transform-style:preserve-3d]">
             <span className="absolute top-5 left-5 z-10 flex items-center gap-1.5 rounded-full bg-exotik px-4 py-1.5 text-xs font-extrabold text-white shadow-xl [transform:translateZ(30px)]">
-              <Sparkles className="size-4" /> Comptoir Fruits Frais
+              <Sparkles className="size-4" /> {t('exotikBadge')}
             </span>
             <img 
               src="/images/sign_exotik.jpg" 
@@ -50,12 +53,12 @@ export default function TwoBrands() {
             />
           </div>
           <div className="p-8 [transform-style:preserve-3d]">
-            <h3 className="font-serif text-3xl font-extrabold text-exotik mb-3 [transform:translateZ(20px)]">Exoti’K</h3>
+            <h3 className="font-serif text-3xl font-extrabold text-exotik mb-3 [transform:translateZ(20px)]">{t('exotikTitle')}</h3>
             <p className="text-muted-foreground text-sm leading-relaxed [transform:translateZ(10px)]">
-              Le temple de la fraîcheur : salades de fruits gorgées de soleil, brochettes chocolatées, jus naturels fraîchement pressés, plateaux décorés et pièces montées spectaculaires pour mariages et cérémonies.
+              {t('exotikDesc')}
             </p>
             <div className="mt-6 pt-4 border-t border-border/60 flex items-center gap-2 text-xs font-bold text-exotik [transform:translateZ(15px)]">
-              <span>🍉 100% Fruits naturels & fraîcheur tropicale absolue</span>
+              <span>{t('exotikFooter')}</span>
             </div>
           </div>
         </TiltCard>

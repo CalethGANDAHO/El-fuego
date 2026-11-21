@@ -6,6 +6,8 @@
   --font-display-family: "Playfair Display", Georgia, serif;
   --font-body-family: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --radius: 1rem;
+  
+  /* Thème Nuit (Dark Lounge) par défaut */
   --background: #140d09;
   --foreground: #fdfaf7;
   --card: #1c130d;
@@ -26,11 +28,28 @@
   --ease-lux: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Thème Jour (Day Mode Solaire & Chaleureux) */
+html.day {
+  --background: #fcf8f4;
+  --foreground: #1c130d;
+  --card: #ffffff;
+  --card-foreground: #1c130d;
+  --secondary: #f5eae0;
+  --secondary-foreground: #221710;
+  --muted: #ede1d4;
+  --muted-foreground: #766355;
+  --border: #e5d4c5;
+  --glass: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(232, 72, 12, 0.22);
+  --shadow-soft: 0 20px 50px -20px rgba(36, 26, 20, 0.15);
+}
+
 body {
   font-family: var(--font-body-family);
   background-color: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  transition: background-color 0.4s var(--ease-lux), color 0.4s var(--ease-lux);
 }
 
 /* Glassmorphism 3D */
@@ -39,7 +58,7 @@ body {
   -webkit-backdrop-filter: blur(18px) saturate(150%);
   backdrop-filter: blur(18px) saturate(150%);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* 3D Depth Utilities */
@@ -47,16 +66,29 @@ body {
   transform-style: preserve-3d;
 }
 
-.translate-z-10 {
-  transform: translateZ(10px);
+.translate-z-10 { transform: translateZ(10px); }
+.translate-z-20 { transform: translateZ(20px); }
+.translate-z-30 { transform: translateZ(30px); }
+
+/* Animation 3D Vivante & Respiration Cinématique pour l'image Hero */
+@keyframes hero3dBreathing {
+  0% {
+    transform: perspective(1000px) scale(1.05) translate3d(0, 0, 0) rotate(0deg);
+  }
+  33% {
+    transform: perspective(1000px) scale(1.09) translate3d(-12px, -8px, 15px) rotate(0.4deg);
+  }
+  66% {
+    transform: perspective(1000px) scale(1.08) translate3d(10px, -5px, 20px) rotate(-0.3deg);
+  }
+  100% {
+    transform: perspective(1000px) scale(1.05) translate3d(0, 0, 0) rotate(0deg);
+  }
 }
 
-.translate-z-20 {
-  transform: translateZ(20px);
-}
-
-.translate-z-30 {
-  transform: translateZ(30px);
+.hero-3d-living {
+  animation: hero3dBreathing 18s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 /* Animation de particules étincelles fluides (60 FPS sur GPU) */
@@ -65,12 +97,8 @@ body {
     transform: translate3d(0, 100vh, 0) scale(0.6);
     opacity: 0;
   }
-  20% {
-    opacity: 0.8;
-  }
-  80% {
-    opacity: 0.6;
-  }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.6; }
   100% {
     transform: translate3d(var(--ember-drift, 40px), -10vh, 0) scale(1.2);
     opacity: 0;
