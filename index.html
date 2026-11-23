@@ -11,6 +11,58 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Masquage radical et immédiat des widgets et bannières injectés par Netlify -->
+  <style>
+    netlify-drawer,
+    #netlify-drawer,
+    [data-netlify-drawer],
+    [class*="netlify-drawer"],
+    [id*="netlify-drawer"],
+    [data-netlify-badge],
+    iframe[src*="netlify"],
+    iframe[title*="Netlify"],
+    iframe[id*="netlify"],
+    div:has(> iframe[src*="netlify"]),
+    div:has(> iframe[title*="Netlify"]) {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      height: 0 !important;
+      width: 0 !important;
+      position: absolute !important;
+      z-index: -9999 !important;
+    }
+  </style>
+  <script>
+    (function() {
+      function purgeNetlifyElements() {
+        const selectors = [
+          'netlify-drawer',
+          '#netlify-drawer',
+          '[data-netlify-drawer]',
+          '[data-netlify-badge]',
+          'iframe[src*="netlify"]',
+          'iframe[title*="Netlify"]',
+          'iframe[id*="netlify"]'
+        ];
+        selectors.forEach(function(sel) {
+          document.querySelectorAll(sel).forEach(function(el) {
+            try { el.remove(); } catch (err) { el.style.display = 'none'; }
+          });
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', purgeNetlifyElements);
+      } else {
+        purgeNetlifyElements();
+      }
+      var observer = new MutationObserver(purgeNetlifyElements);
+      observer.observe(document.documentElement, { childList: true, subtree: true });
+      setTimeout(function() { observer.disconnect(); }, 12000);
+    })();
+  </script>
 </head>
 <body class="bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary">
   <div id="root"></div>
